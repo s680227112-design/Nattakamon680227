@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>พรหมชาติวิจิตร - ทำนายดวงชะตา 12 ฐาน</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Chakra Petch, Niramit & Bai Jamjuree -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:ital,wght@0,300;0,400;0,600;0,700;1,400&family=Chakra+Petch:wght@400;600;700&family=Niramit:ital,wght@0,300;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Bai Jamjuree', sans-serif;
+        }
+        .font-header {
+            font-family: 'Chakra Petch', sans-serif;
+        }
+        .font-body {
+            font-family: 'Niramit', sans-serif;
+        }
+
+        /* Mystic Gold Background Gradient */
+        body {
+            background: radial-gradient(circle at center, #1a0f2e 0%, #0d0614 60%, #05020a 100%);
+            color: #f3e8ff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Golden Text Gradient Effects */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF6D3 0%, #F3CA68 35%, #E5A93C 70%, #996A13 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-gradient-bg {
+            background: linear-gradient(135deg, #f7d57f 0%, #d49b35 50%, #8c5d11 100%);
+        }
+
+        .gold-gradient-btn {
+            background: linear-gradient(135deg, #F3CA68 0%, #C48E28 50%, #85580C 100%);
+            color: #120902;
+            text-shadow: 0 1px 1px rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 20px rgba(212, 155, 53, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gold-gradient-btn:hover {
+            background: linear-gradient(135deg, #FFE89C 0%, #E3A83A 50%, #9E6B12 100%);
+            box-shadow: 0 6px 25px rgba(243, 202, 104, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+            transform: translateY(-2px);
+        }
+
+        /* Mystical Glow Cards & Borders */
+        .gold-border-glow {
+            border: 1px solid rgba(243, 202, 104, 0.3);
+            box-shadow: 0 0 15px rgba(212, 155, 53, 0.15);
+        }
+
+        .card-inner-shadow {
+            background: rgba(20, 10, 35, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(243, 202, 104, 0.25);
+        }
+
+        /* Card 3D Flip Animation */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .transform-style-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+
+        /* Glowing Pulse Effect */
+        @keyframes auraPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(243, 202, 104, 0.3), 0 0 30px rgba(186, 120, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(243, 202, 104, 0.6), 0 0 50px rgba(212, 155, 53, 0.5);
+            }
+        }
+        .aura-active {
+            animation: auraPulse 2.5s infinite ease-in-out;
+        }
+
+        /* Particles Overlay */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Thai Traditional Ornament Lines */
+        .thai-line {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .thai-line::before, .thai-line::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, transparent, rgba(243, 202, 104, 0.6), transparent);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0614;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a2d73;
+            border-radius: 4px;
+            border: 1px solid rgba(243, 202, 104, 0.3);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #85580C;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen pb-16">
+
+    <canvas id="particles-canvas"></canvas>
+
+    <header class="relative z-10 pt-8 pb-4 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <!-- Decorative Thai Top Ornament -->
+            <div class="flex justify-center items-center gap-3 text-amber-400 opacity-80 mb-2">
+                <i class="fa-solid fa-om text-xl"></i>
+                <span class="text-xs tracking-widest uppercase text-amber-300 font-semibold">ตำราโหราศาสตร์โบราณ</span>
+                <i class="fa-solid fa-om text-xl"></i>
+            </div>
+           
+            <h1 class="font-header text-3xl sm:text-5xl font-bold gold-gradient-text tracking-wide mb-2 drop-shadow-md">
+                พรหมชาติวิจิตร
+            </h1>
+            <p class="font-body text-amber-200/80 text-sm sm:text-base max-w-xl mx-auto font-light">
+                ทำนายชะตาชีวิต 12 ฐาน หยั่งรู้โชคลาภ วาสนา เคราะห์ยาม และแนวทางผ่อนหนักเป็นเบา
+            </p>
+
+            <div class="thai-line max-w-md mx-auto my-4 text-amber-400/50">
+                <i class="fa-solid fa-star text-xs"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 max-w-6xl mx-auto px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+       
+        <!-- Left Column: Fortune Form & Controls (5 Cols) -->
+        <section class="lg:col-span-5 bg-purple-950/40 rounded-2xl p-6 sm:p-8 card-inner-shadow gold-border-glow relative overflow-hidden">
+            <!-- Corner Decorative Badges -->
+            <div class="absolute top-0 left-0 w-12 h-12 border-t-2 border-l-2 border-amber-400/60 rounded-tl-2xl"></div>
+            <div class="absolute top-0 right-0 w-12 h-12 border-t-2 border-r-2 border-amber-400/60 rounded-tr-2xl"></div>
+            <div class="absolute bottom-0 left-0 w-12 h-12 border-b-2 border-l-2 border-amber-400/60 rounded-bl-2xl"></div>
+            <div class="absolute bottom-0 right-0 w-12 h-12 border-b-2 border-r-2 border-amber-400/60 rounded-br-2xl"></div>
+
+            <h2 class="font-header text-xl sm:text-2xl font-semibold gold-gradient-text mb-6 flex items-center gap-3 border-b border-amber-500/20 pb-3">
+                <i class="fa-solid fa-dharmachakra text-amber-400 animate-spin-slow"></i>
+                ระบุข้อมูลชะตาชีวิต
+            </h2>
+
+            <form id="fortuneForm" onsubmit="event.preventDefault(); startPrediction();" class="space-y-6">
+                <!-- Gender Selection -->
+                <div>
+                    <label class="block text-amber-200 font-medium mb-3 text-sm">
+                        <i class="fa-solid fa-venus-mars text-amber-400 mr-2"></i>เพศกำเนิด
+                    </label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="relative flex items-center justify-center p-3 rounded-xl border border-amber-500/30 bg-purple-900/30 cursor-pointer hover:bg-purple-800/40 transition-all group">
+                            <input type="radio" name="gender" value="male" checked class="peer sr-only">
+                            <div class="flex items-center gap-2 text-amber-100 peer-checked:text-amber-300 font-medium">
+                                <i class="fa-solid fa-mars text-lg text-blue-400 group-hover:scale-110 transition-transform"></i>
+                                <span>ชาย</span>
+                            </div>
+                            <div class="absolute inset-0 border-2 border-amber-400 rounded-xl opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></div>
+                        </label>
+
+                        <label class="relative flex items-center justify-center p-3 rounded-xl border border-amber-500/30 bg-purple-900/30 cursor-pointer hover:bg-purple-800/40 transition-all group">
+                            <input type="radio" name="gender" value="female" class="peer sr-only">
+                            <div class="flex items-center gap-2 text-amber-100 peer-checked:text-amber-300 font-medium">
+                                <i class="fa-solid fa-venus text-lg text-pink-400 group-hover:scale-110 transition-transform"></i>
+                                <span>หญิง</span>
+                            </div>
+                            <div class="absolute inset-0 border-2 border-amber-400 rounded-xl opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"></div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Age Input -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label for="ageInput" class="text-amber-200 font-medium text-sm">
+                            <i class="fa-solid fa-hourglass-half text-amber-400 mr-2"></i>อายุย่าง (ปี)
+                        </label>
+                        <span class="text-xs text-amber-300/60">*นับอายุแบบย่างปีปัจจุบัน</span>
+                    </div>
+                    <div class="relative">
+                        <input type="number" id="ageInput" min="1" max="120" placeholder="เช่น 25" required
+                            class="w-full bg-purple-950/80 border border-amber-500/40 rounded-xl px-4 py-3.5 text-amber-100 font-semibold focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 transition-all text-lg placeholder-amber-700">
+                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-amber-400/60 font-light">ปี</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-2 space-y-3">
+                    <button type="submit" id="predictBtn" class="w-full gold-gradient-btn py-4 rounded-xl font-header font-bold text-lg flex items-center justify-center gap-3 text-slate-950">
+                        <i class="fa-solid fa-sparkles text-amber-900"></i>
+                        <span>ทำนายดวงชะตา</span>
+                    </button>
+                    <button type="button" onclick="resetPrediction()" class="w-full bg-purple-900/30 hover:bg-purple-800/40 text-amber-200/70 hover:text-amber-200 border border-amber-500/20 py-2.5 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>ล้างข้อมูล / ทำนายใหม่</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Quick Info Hint -->
+            <div class="mt-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/80 leading-relaxed flex gap-3 items-start">
+                <i class="fa-solid fa-circle-info text-amber-400 text-base mt-0.5 shrink-0"></i>
+                <p>การคำนวณตามตำราพรหมชาติโบราณจะนับเวียนตามรอบ 12 ฐานตามเพศกำเนิด ชายเวียนตามลำดับ หญิงเวียนย้อนกลับ เพื่อดูเกณฑ์ดวงชะตาตกประจำปีนั้นๆ</p>
+            </div>
+        </section>
+
+        <!-- Right Column: Interactive Prediction Card Visualizer (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col items-center">
+           
+            <!-- Oracle Card Container -->
+            <div id="cardContainer" class="w-full max-w-sm perspective-1000 my-4 min-h-[420px]">
+                <div id="oracleCard" class="relative w-full h-[430px] rounded-2xl transform-style-3d transition-transform duration-1000 shadow-2xl cursor-pointer">
+                   
+                    <!-- Card Front (Default Unknown State) -->
+                    <div class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-purple-900 via-indigo-950 to-slate-950 border-2 border-amber-400/50 p-6 flex flex-col items-center justify-between backface-hidden shadow-2xl overflow-hidden aura-active">
+                        <!-- Card Frame Design -->
+                        <div class="absolute inset-2 border border-amber-400/30 rounded-xl pointer-events-none"></div>
+                        <div class="absolute inset-4 border border-amber-500/10 rounded-lg pointer-events-none"></div>
+
+                        <!-- Top Symbol -->
+                        <div class="text-amber-400/60 text-xs tracking-widest uppercase flex items-center gap-2">
+                            <i class="fa-solid fa-star text-[10px]"></i>
+                            <span>ตำราพรหมชาติ</span>
+                            <i class="fa-solid fa-star text-[10px]"></i>
+                        </div>
+
+                        <!-- Center Oracle Symbol/Artwork -->
+                        <div class="flex flex-col items-center my-auto text-center px-4">
+                            <div class="w-28 h-28 rounded-full border border-amber-400/40 flex items-center justify-center bg-purple-950/60 mb-4 shadow-inner relative group">
+                                <i class="fa-solid fa-eye-drop text-4xl text-amber-300 animate-pulse"></i>
+                                <div class="absolute inset-0 rounded-full bg-amber-400/10 animate-ping opacity-30"></div>
+                            </div>
+                            <h3 class="font-header text-lg font-bold gold-gradient-text mb-1">ไพ่พรหมชาติหยั่งรู้</h3>
+                            <p class="text-xs text-amber-200/60 max-w-xs">ระบุเพศและอายุ จากนั้นกดปุ่ม "ทำนายดวงชะตา" เพื่อเปิดไพ่คำทำนาย</p>
+                        </div>
+
+                        <!-- Bottom Tag -->
+                        <div class="text-amber-400/50 text-[11px] font-mono">
+                            PROMHATCHAT • 12 BASES
+                        </div>
+                    </div>
+
+                    <!-- Card Back (Predicted Result Display) -->
+                    <div id="cardBack" class="absolute inset-0 w-full h-full rounded-2xl bg-gradient-to-br from-purple-900 via-slate-900 to-purple-950 border-2 border-amber-400 p-6 flex flex-col items-center justify-between backface-hidden rotate-y-180 shadow-2xl overflow-hidden">
+                        <div class="absolute inset-2 border border-amber-400/40 rounded-xl pointer-events-none"></div>
+                       
+                        <!-- Base Badge -->
+                        <div class="w-full flex justify-between items-center z-10">
+                            <span id="resBadgeNumber" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                                ฐานที่ -
+                            </span>
+                            <span id="resBadgeStatus" class="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                                -
+                            </span>
+                        </div>
+
+                        <!-- Main Image & Title -->
+                        <div class="flex flex-col items-center text-center my-auto z-10">
+                            <div id="resIconContainer" class="w-24 h-24 rounded-full border-2 border-amber-400/60 bg-purple-950/80 flex items-center justify-center text-amber-300 text-4xl shadow-xl mb-3 relative">
+                                <i id="resIcon" class="fa-solid fa-archway"></i>
+                            </div>
+                            <h2 id="resTitle" class="font-header text-2xl font-bold gold-gradient-text mb-1">
+                                ฐาน...
+                            </h2>
+                            <p id="resSubtitle" class="text-xs text-amber-200/80 italic font-body">
+                                "..."
+                            </p>
+                        </div>
+
+                        <div class="text-amber-400/80 text-xs flex items-center gap-1 z-10">
+                            <i class="fa-solid fa-chevron-down animate-bounce"></i>
+                            <span>อ่านคำทำนายอย่างละเอียดด้านล่าง</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <section id="resultDetailSection" class="relative z-10 max-w-4xl mx-auto px-4 mt-6 hidden">
+        <div class="bg-purple-950/60 rounded-2xl p-6 sm:p-8 card-inner-shadow gold-border-glow relative">
+            <div class="flex items-center justify-between border-b border-amber-500/30 pb-4 mb-6">
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid fa-scroll text-amber-400 text-2xl"></i>
+                    <div>
+                        <h3 class="font-header text-xl sm:text-2xl font-bold gold-gradient-text">คำทำนายดวงชะตาประจำปี</h3>
+                        <p id="resUserInfo" class="text-xs text-amber-300/70"></p>
+                    </div>
+                </div>
+                <button onclick="copyResultText()" class="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 rounded-lg text-xs transition-all flex items-center gap-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copyBtnText">คัดลอกคำทำนาย</span>
+                </button>
+            </div>
+
+            <!-- Prediction Content Box -->
+            <div class="space-y-6">
+                <!-- Description -->
+                <div>
+                    <h4 class="font-header text-amber-300 text-base font-semibold mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-star-of-david text-amber-400 text-sm"></i>
+                        เกณฑ์ดวงชะตารวม
+                    </h4>
+                    <p id="resFullDescription" class="text-amber-100/90 text-sm sm:text-base leading-relaxed font-body bg-purple-900/30 p-4 rounded-xl border border-amber-500/10">
+                    </p>
+                </div>
+
+                <!-- Grid details: Advice & Merit making -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Advice -->
+                    <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                        <h5 class="font-header text-amber-300 font-semibold text-sm mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-shield-halved text-amber-400"></i>
+                            ข้อควรระวัง / การดำเนินชีวิต
+                        </h5>
+                        <p id="resAdvice" class="text-xs sm:text-sm text-amber-100/80 leading-relaxed font-body">
+                        </p>
+                    </div>
+
+                    <!-- Merit Making -->
+                    <div class="p-4 rounded-xl bg-purple-900/40 border border-purple-400/20">
+                        <h5 class="font-header text-purple-200 font-semibold text-sm mb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-hands-praying text-amber-300"></i>
+                            คำแนะนำเสริมดวง / ทำบุญสะเดาะเคราะห์
+                        </h5>
+                        <p id="resMerit" class="text-xs sm:text-sm text-amber-100/80 leading-relaxed font-body">
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative z-10 max-w-6xl mx-auto px-4 mt-16">
+        <div class="text-center mb-10">
+            <h2 class="font-header text-2xl sm:text-3xl font-bold gold-gradient-text mb-2">
+                คลังตำราพรหมชาติ 12 ฐาน
+            </h2>
+            <p class="text-amber-200/70 text-xs sm:text-sm max-w-lg mx-auto">
+                เลือกคลิกที่ฐานที่สนใจเพื่อดูรายละเอียดความหมาย และคำทำนายของแต่ละฐานได้ทันที
+            </p>
+            <div class="thai-line max-w-xs mx-auto my-3 text-amber-400/40"></div>
+        </div>
+
+        <!-- 12 Cards Grid -->
+        <div id="basesGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- Dynamic JS Injected Cards -->
+        </div>
+    </section>
+
+    <div id="baseModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="bg-gradient-to-b from-purple-950 to-slate-950 border-2 border-amber-400/60 rounded-2xl p-6 sm:p-8 max-w-lg w-full gold-border-glow relative transform scale-95 transition-transform duration-300 shadow-2xl">
+            <!-- Close Button -->
+            <button onclick="closeBaseModal()" class="absolute top-4 right-4 text-amber-400 hover:text-amber-200 text-xl w-8 h-8 flex items-center justify-center rounded-full bg-purple-900/40 border border-amber-500/20">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Content Header -->
+            <div class="text-center mb-6">
+                <div id="modalIconContainer" class="w-20 h-20 rounded-full border-2 border-amber-400/60 bg-purple-900/60 mx-auto flex items-center justify-center text-amber-300 text-3xl mb-3 shadow-lg">
+                    <i id="modalIcon" class="fa-solid fa-archway"></i>
+                </div>
+                <span id="modalBadgeNumber" class="text-xs font-bold px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 border border-amber-400/30">
+                    ฐานที่ -
+                </span>
+                <h3 id="modalTitle" class="font-header text-2xl font-bold gold-gradient-text mt-2">
+                    -
+                </h3>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="space-y-4 text-xs sm:text-sm text-amber-100/90 font-body max-h-[60vh] overflow-y-auto pr-2">
+                <div class="bg-purple-900/30 p-3.5 rounded-xl border border-amber-500/10">
+                    <span class="font-bold text-amber-300 block mb-1">คำทำนายหลัก:</span>
+                    <p id="modalDesc" class="leading-relaxed"></p>
+                </div>
+                <div class="bg-amber-500/10 p-3.5 rounded-xl border border-amber-500/20">
+                    <span class="font-bold text-amber-300 block mb-1">การดำเนินชีวิต & ข้อควรระวัง:</span>
+                    <p id="modalAdvice" class="leading-relaxed"></p>
+                </div>
+                <div class="bg-purple-900/40 p-3.5 rounded-xl border border-purple-400/20">
+                    <span class="font-bold text-purple-200 block mb-1">เคล็ดเสริมดวง / สะเดาะเคราะห์:</span>
+                    <p id="modalMerit" class="leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center mt-20 text-xs text-amber-400/40">
+        <p>© พรหมชาติวิจิตร - เว็บแอปพลิเคชันทำนายดวงชะตาโบราณสไตล์ไทยประยุกต์</p>
+		<p>
+		นางสาวณัฐกมล โพธิ์เนียม 680227-122
+		</p>
+    </footer>
+
+    <script>
+        // 12 Promhatchat Bases Data Dictionary
+        const PROM_BASES = [
+            {
+                id: 1,
+                name: "เจดีย์",
+                icon: "fa-gopuram",
+                status: "มงคลยิ่ง",
+                statusColor: "emerald",
+                subtitle: "ความร่มเย็นเป็นสุข ปลอดโปร่ง สมปรารถนา",
+                description: "ปีนี้ดวงชะตาดำเนินไปด้วยความร่มเย็นเป็นสุข สภาพจิตใจปลอดโปร่ง มีโอกาสได้สร้างบุญกุศลและความดีงาม สิ่งที่มุ่งหวังหรือตั้งใจไว้มีเกณฑ์จะสมปรารถนาทุกประการ ได้รับการสรรเสริญจากคนรอบข้าง",
+                advice: "ตั้งมั่นในความดีงาม ใช้สติในการดำเนินชีวิต ไม่ประมาทในการวางแผนอนาคต",
+                merit: "ถวายสังฆทาน ทำบุญสร้างวัดหรือถวายกระเบื้องมุงหลังคาโบสถ์ เสริมบารมีให้มั่นคง"
+            },
+            {
+                id: 2,
+                name: "ฉัตรเงิน",
+                icon: "fa-umbrella",
+                status: "โชคลาภพูนทวี",
+                statusColor: "emerald",
+                subtitle: "การเงินคล่องตัว ผู้ใหญ่สนับสนุนก้าวหน้า",
+                description: "เป็นช่วงเวลาแห่งความราบรื่นและโชคลาภ มีความคล่องตัวทางการเงิน ได้รับการสนับสนุนจากผู้หลักผู้ใหญ่ หากรับราชการหรือประกอบธุรกิจค้าขายจะมีอัตราการเจริญเติบโตที่เด่นชัด มีเกณฑ์ได้ทรัพย์สินเพิ่ม",
+                advice: "หมั่นผูกมิตรและอ่อนน้อมถ่อมตนต่อผู้ใหญ่ จะยิ่งได้รับการอุปถัมภ์ค้ำชูดียิ่งขึ้น",
+                merit: "ทำบุญบริจาคทานแก่ผู้ยากไร้ หรือร่วมบุญหล่อพระพุทธรูป เสริมโชคลาภเงินทอง"
+            },
+            {
+                id: 3,
+                name: "คนคอขาด",
+                icon: "fa-user-ninja",
+                status: "ระมัดระวังรอบคอบ",
+                statusColor: "rose",
+                subtitle: "ระวังเดือดร้อนเพราะผู้อื่น เสียทรัพย์สิน",
+                description: "ถือเป็นเกณฑ์ชะตาที่ต้องใช้ความระมัดระวังเป็นพิเศษ อาจประสบกับปัญหาความเดือดร้อน ร้อนใจอันเกิดจากผู้อื่น รวมถึงมีความเสี่ยงต่อการสูญเสียทรัพย์สินเงินทองโดยไม่จำเป็น หรือมีคดีความ",
+                advice: "งดเว้นการเซ็นสัญญาค้ำประกัน ห้ามให้ผู้อื่นยืมเงิน หลีกเลี่ยงการเที่ยวกลางคืน",
+                merit: "ปล่อยนก ปล่อยปลา ปล่อยชีวิตสัตว์ใหญ่ ทำบุญบริจาคโลหิต หรือไถ่ชีวิตโคกระบือเพื่อแก้เคล็ด"
+            },
+            {
+                id: 4,
+                name: "เรือนหลวง",
+                icon: "fa-landmark-dome",
+                status: "มหาเจริญรุ่งเรือง",
+                statusColor: "emerald",
+                subtitle: "ดวงชะตาขาขึ้น มีผู้อุปถัมภ์ ศัตรูแพ้ภัย",
+                description: "ดวงชะตาอยู่ในขาขึ้น กิจการงานและการดำเนินชีวิตมีความเจริญก้าวหน้าอย่างมั่นคง ได้รับลาภผลเงินทอง มีผู้อุปถัมภ์ค้ำชูอย่างดียิ่ง และอุปสรรคศัตรูจะแพ้ภัยไปเอง ได้รับยศฐาบรรดาศักดิ์",
+                advice: "ขยันตั้งใจทำงานและเร่งสร้างผลงาน เพราะเป็นช่วงเวลาที่ทำสิ่งใดก็มักจะประสบความสำเร็จง่าย",
+                merit: "ร่วมสมทบทุนสร้างอาคารเรียน อาคารโรงพยาบาล หรือบริจาคเครื่องมือแพทย์"
+            },
+            {
+                id: 5,
+                name: "ปราสาททอง",
+                icon: "fa-chess-rook",
+                status: "มงคลโชคลาภ",
+                statusColor: "emerald",
+                subtitle: "สมหวังในความรัก กำไรค้าขาย มั่งคั่ง",
+                description: "ผู้ที่ยังโสดมีเกณฑ์ได้พบเจอคู่ครอง ชีวิตโดยรวมมีความเจริญรุ่งเรือง การลงทุนหรือการค้าขายให้ผลกำไรเป็นที่น่าพึงพอใจ ได้รับความสำเร็จในสิ่งที่มุ่งหวัง มีลาภลอยหรือโชคใหญ่เข้ามา",
+                advice: "ควรรักษาความซื่อสัตย์สุจริต ไม่โลภมากเกินไป จะช่วยให้ความมั่งคั่งคงอยู่ยาวนาน",
+                merit: "ทำบุญเกี่ยวกับค่าน้ำ ค่าไฟวัด ถวายเทียนพรรษา หรือหลอดไฟเพื่อเพิ่มความสว่างไสวให้ชีวิต"
+            },
+            {
+                id: 6,
+                name: "ราหู",
+                icon: "fa-moon",
+                status: "ต้องระมัดระวัง",
+                statusColor: "amber",
+                subtitle: "ระวังเสียทรัพย์ ขัดแย้ง ปัญหาสุขภาพ",
+                description: "ระยะนี้ต้องตั้งสติและรอบคอบเป็นพิเศษ มีเกณฑ์ความกังวลใจจากปัญหาของผู้อื่น เสียทรัพย์สินโดยใช่เหตุ มักเกิดข้อพิพาทหรือความขัดแย้งกับคนรอบข้าง รวมถึงต้องระวังปัญหาสุขภาพโรคเก่ากำเริบ",
+                advice: "สวดมนต์ไหว้พระเป็นประจำ หลีกเลี่ยงการใช้อารมณ์ตัดสินปัญหา ไม่ควรเดินทางยามวิกาล",
+                merit: "ไหว้พระราหู ทำบุญด้วยของดำ 8 อย่าง หรือบริจาคผ้าห่อศพ มูลนิธิกู้ภัยต่างๆ"
+            },
+            {
+                id: 7,
+                name: "ฉัตรทอง",
+                icon: "fa-crown",
+                status: "มหาโชคลาภ",
+                statusColor: "emerald",
+                subtitle: "อุดมทรัพย์สิน เกียรติยศ มิตรแท้ผู้ใหญ่อุปถัมภ์",
+                description: "เป็นปีที่โดดเด่นด้วยโชคลาภและความมั่งคั่ง เพียบพร้อมด้วยทรัพย์สินเกียรติยศ และมิตรที่ดี มีผู้ใหญ่ให้ความเมตตาช่วยเหลือ ชีวิตมีความสุขความเจริญก้าวหน้า มีโชคจากเดินทาง",
+                advice: "หมั่นแผ่เมตตาและแบ่งปันความสุขให้กับผู้ยากไร้ จะยิ่งเสริมบารมีให้สูงยิ่งขึ้น",
+                merit: "ถวายผ้าไตรจีวร ทำบุญปิดทองพระพุทธรูป หรือปิดทองรอบรอยพระพุทธบาท"
+            },
+            {
+                id: 8,
+                name: "เทวดาขี่เต่า",
+                icon: "fa-shield-cat",
+                status: "ปานกลางพอมีพอกิน",
+                statusColor: "amber",
+                subtitle: "ดำเนินชีวิตพอประมาณ ช้าแต่ชัวร์ ระวังผิดพลาด",
+                description: "ดำเนินชีวิตด้วยความพอประมาณ การเงินอยู่ในเกณฑ์พอมีพอกิน การกระทำกิจการใดๆ จำต้องใช้ความรอบคอบและวิจารณญาณอย่างสูง ช้าๆ ได้พร้าเล่มงาม มิฉะนั้นอาจเกิดข้อผิดพลาดและความเดือดร้อนตามมา",
+                advice: "อย่ารีบร้อนทำการใหญ่ ให้ค่อยเป็นค่อยไป ไม่ควรลงทุนในสิ่งที่มีความเสี่ยงสูง",
+                merit: "ทำบุญปล่อยเต่า ไถ่ชีวิตสัตว์ หรือบริจาคเงินซื้ออุปกรณ์ช่วยเหลือคนพิการ"
+            },
+            {
+                id: 9,
+                name: "คนต้องขื่อคา",
+                icon: "fa-lock",
+                status: "เกณฑ์ไม่สู้ดี",
+                statusColor: "rose",
+                subtitle: "ระวังปัญหาญาติมิตร ถูกจองจำ/อึดอัดใจ",
+                description: "เกณฑ์ชะตาอยู่ในภาวะไม่สู้ดี ควรระมัดระวังปัญหาจากญาติมิตร ความสัมพันธ์กับคนใกล้ชิดมีความเปราะบาง รู้สึกอึดอัดเหมือนโดนพันธนาการ หลีกเลี่ยงการเดินทางไกล และระวังเรื่องกฎหมาย",
+                advice: "หาเวลาสวดมนต์ปฏิบัติธรรม หลีกเลี่ยงการยุ่งเกี่ยวกับเรื่องของผู้อื่น วางตัวเป็นกลาง",
+                merit: "ทำบุญไถ่ถอนชีวิตสัตว์ ซื้อกุญแจถวายวัด หรือทำบุญสนับสนุนทุนการศึกษาให้เด็กด้อยโอกาส"
+            },
+            {
+                id: 10,
+                name: "พ่อหมอ",
+                icon: "fa-user-doctor",
+                status: "มีเกียรติยศชื่อเสียง",
+                statusColor: "emerald",
+                subtitle: "ไร้ภัยมารบกวน ผู้ใหญ่อุปถัมภ์ ได้รับเกียรติยศ",
+                description: "เป็นปีที่ได้รับเกียรติยศชื่อเสียง มีผู้ใหญ่อุปถัมภ์ค้ำชูอย่างดียิ่ง ชีวิตมีความเจริญก้าวหน้าและได้รับผลตอบแทนที่เป็นที่น่าพึงพอใจ ปราศจากภยันตรายใดๆ มากล้ำกราย โรคภัยคลายหาย",
+                advice: "ใช้ความรู้ความสามารถช่วยเหลือผู้อื่น จะยิ่งเสริมสร้างชื่อเสียงเกียรติยศให้ขจรขจาย",
+                merit: "ทำบุญถวายยารักษาโรคแก่พระสงฆ์ หรือร่วมบริจาคค่ายารักษาโรคให้ผู้ป่วยยากไร้"
+            },
+            {
+                id: 11,
+                name: "แม่มด",
+                icon: "fa-wand-magic-sparkles",
+                status: "มีโชคเจรจา",
+                statusColor: "amber",
+                subtitle: "วาจาสิทธิ์ ผู้ใหญ่เมตตา ต้องใช้พลังกายใจสูง",
+                description: "ได้รับการสนับสนุนจากผู้บังคับบัญชาหรือผู้มีอำนาจ คำพูดและการเจรจาสร้างความน่าเชื่อถือ เป็นที่รักใคร่ของคนรอบข้าง มีโชคลาภเข้ามาบ้างตามสมควร แต่อาจต้องใช้พลังกายและพลังใจในการปฏิบัติงานค่อนข้างมาก",
+                advice: "ระวังเรื่องสุขภาพกายจากการทำงานหนัก และควบคุมอารมณ์รวมถึงคำพูดคำจาให้ดี",
+                merit: "ทำบุญด้วยน้ำดื่มสะอาด น้ำปานะ หรือร่วมบริจาคโลหิตเพื่อเสริมพลังชีวิต"
+            },
+            {
+                id: 12,
+                name: "นาคราช",
+                icon: "fa-dragon",
+                status: "ควรระมัดระวังภัย",
+                statusColor: "rose",
+                subtitle: "ระวังอุบัติเหตุ สัตว์มีพิษ สุขภาพเจ็บป่วย",
+                description: "ถือเป็นเกณฑ์ที่ต้องระมัดระวังภัยอันตรายอย่างเคร่งครัด มีความเสี่ยงด้านสุขภาพ การเจ็บไข้ได้ป่วย หรืออุบัติเหตุจากของมีคม สัตว์มีพิษกัดตอด แนะนำให้งดการเบียดเบียนชีวิตสัตว์และหมั่นบำเพ็ญกุศล",
+                advice: "หลีกเลี่ยงการเดินทางเข้าป่ายามวิกาล งดกิจกรรมเสี่ยงอันตราย ระวังของมีคม",
+                merit: "สวดมนต์บทวิปัสสิ หรือบทคาถาชินบัญชร หมั่นทำบุญตักบาตร งดเนื้อสัตว์ในวันพระ"
+            }
+        ];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initParticles();
+            renderBasesGrid();
+        });
+
+        // Background Particle Effect Setup
+        function initParticles() {
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+                reset() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedY = Math.random() * -0.5 - 0.2;
+                    this.speedX = (Math.random() - 0.5) * 0.3;
+                    this.opacity = Math.random() * 0.7 + 0.2;
+                }
+                update() {
+                    this.y += this.speedY;
+                    this.x += this.speedX;
+                    if (this.y < 0) this.y = canvas.height;
+                    if (this.x < 0 || this.x > canvas.width) this.reset();
+                }
+                draw() {
+                    ctx.fillStyle = `rgba(243, 202, 104, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Render All 12 Bases in Grid Library
+        function renderBasesGrid() {
+            const grid = document.getElementById('basesGrid');
+            grid.innerHTML = PROM_BASES.map(base => `
+                <div onclick="openBaseModal(${base.id})" class="bg-purple-950/40 hover:bg-purple-900/60 border border-amber-500/20 hover:border-amber-400/60 p-4 rounded-xl transition-all cursor-pointer group card-inner-shadow flex flex-col items-center text-center">
+                    <div class="w-12 h-12 rounded-full border border-amber-400/30 bg-purple-900/50 flex items-center justify-center text-amber-300 text-xl mb-3 group-hover:scale-110 group-hover:border-amber-400 transition-all">
+                        <i class="fa-solid ${base.icon}"></i>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-400/10 text-amber-300 mb-1 border border-amber-400/20">
+                        ฐานที่ ${base.id}
+                    </span>
+                    <h4 class="font-header text-base font-bold gold-gradient-text group-hover:text-amber-200">${base.name}</h4>
+                    <p class="text-[11px] text-amber-200/60 line-clamp-2 mt-1 font-body">${base.subtitle}</p>
+                </div>
+            `).join('');
+        }
+
+        // Current Fortune Prediction Calculation
+        let currentPredictedBase = null;
+
+        function startPrediction() {
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const ageInput = document.getElementById('ageInput');
+            const age = parseInt(ageInput.value);
+
+            if (isNaN(age) || age <= 0) {
+                alert("กรุณากรอกอายุย่างเป็นตัวเลขที่ถูกต้อง (ตั้งแต่ 1 ปีขึ้นไป)");
+                return;
+            }
+
+            // Calculation Logic based on Promhatchat Standard
+            let baseIndex = 0;
+            if (gender === "male") {
+                baseIndex = age % 12;
+                if (baseIndex === 0) baseIndex = 12;
+            } else {
+                baseIndex = (14 - (age % 12)) % 12;
+                if (baseIndex === 0) baseIndex = 12;
+            }
+
+            currentPredictedBase = PROM_BASES.find(b => b.id === baseIndex);
+
+            // Oracle Card Flip Animation Effect
+            const oracleCard = document.getElementById('oracleCard');
+            const predictBtn = document.getElementById('predictBtn');
+           
+            predictBtn.disabled = true;
+            predictBtn.classList.add('opacity-50');
+
+            // Reset Card View if already flipped
+            oracleCard.classList.remove('rotate-y-180');
+
+            // Glow Aura animation
+            oracleCard.classList.add('aura-active');
+
+            setTimeout(() => {
+                // Populate Card Back Info
+                document.getElementById('resBadgeNumber').innerText = `ฐานที่ ${currentPredictedBase.id}`;
+               
+                const badgeStatus = document.getElementById('resBadgeStatus');
+                badgeStatus.innerText = currentPredictedBase.status;
+                if (currentPredictedBase.statusColor === 'emerald') {
+                    badgeStatus.className = "text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                } else if (currentPredictedBase.statusColor === 'amber') {
+                    badgeStatus.className = "text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30";
+                } else {
+                    badgeStatus.className = "text-xs font-semibold px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                }
+
+                document.getElementById('resIcon').className = `fa-solid ${currentPredictedBase.icon}`;
+                document.getElementById('resTitle').innerText = `ฐาน "${currentPredictedBase.name}"`;
+                document.getElementById('resSubtitle').innerText = `"${currentPredictedBase.subtitle}"`;
+
+                // Flip Card
+                oracleCard.classList.add('rotate-y-180');
+
+                // Confetti if good status
+                if (currentPredictedBase.statusColor === 'emerald' && typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 60,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                }
+
+                // Display Detailed Results
+                showResultDetails(gender, age);
+
+                predictBtn.disabled = false;
+                predictBtn.classList.remove('opacity-50');
+            }, 800);
+        }
+
+        // Show Result Details in Section below
+        function showResultDetails(gender, age) {
+            const detailSection = document.getElementById('resultDetailSection');
+            const genderText = gender === 'male' ? 'เพศชาย' : 'เพศหญิง';
+
+            document.getElementById('resUserInfo').innerText = `ข้อมูลชะตา: ${genderText} • อายุย่าง ${age} ปี`;
+            document.getElementById('resFullDescription').innerText = currentPredictedBase.description;
+            document.getElementById('resAdvice').innerText = currentPredictedBase.advice;
+            document.getElementById('resMerit').innerText = currentPredictedBase.merit;
+
+            detailSection.classList.remove('hidden');
+            detailSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Reset Prediction
+        function resetPrediction() {
+            document.getElementById('fortuneForm').reset();
+            const oracleCard = document.getElementById('oracleCard');
+            oracleCard.classList.remove('rotate-y-180');
+            document.getElementById('resultDetailSection').classList.add('hidden');
+            currentPredictedBase = null;
+        }
+
+        // Copy Prediction Text
+        function copyResultText() {
+            if (!currentPredictedBase) return;
+
+            const textToCopy = `[คำทำนายดวงชะตาพรหมชาติวิจิตร]\n` +
+                `ดวงตกฐานที่ ${currentPredictedBase.id}: "${currentPredictedBase.name}" (${currentPredictedBase.status})\n` +
+                `คำทำนาย: ${currentPredictedBase.description}\n` +
+                `ข้อควรระวัง: ${currentPredictedBase.advice}\n` +
+                `เคล็ดเสริมดวง: ${currentPredictedBase.merit}`;
+
+            const copyBtnText = document.getElementById('copyBtnText');
+
+            // ExecCommand Fallback for strict iframe compatibility
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = textToCopy;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            copyBtnText.innerText = "คัดลอกเรียบร้อย!";
+            setTimeout(() => {
+                copyBtnText.innerText = "คัดลอกคำทำนาย";
+            }, 2000);
+        }
+
+        // Modal Functionalities for Base Library
+        function openBaseModal(id) {
+            const base = PROM_BASES.find(b => b.id === id);
+            if (!base) return;
+
+            document.getElementById('modalBadgeNumber').innerText = `ฐานที่ ${base.id} • ${base.status}`;
+            document.getElementById('modalIcon').className = `fa-solid ${base.icon}`;
+            document.getElementById('modalTitle').innerText = `ฐาน "${base.name}"`;
+            document.getElementById('modalDesc').innerText = base.description;
+            document.getElementById('modalAdvice').innerText = base.advice;
+            document.getElementById('modalMerit').innerText = base.merit;
+
+            const modal = document.getElementById('baseModal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modal.children[0].classList.remove('scale-95');
+            modal.children[0].classList.add('scale-100');
+        }
+
+        function closeBaseModal() {
+            const modal = document.getElementById('baseModal');
+            modal.children[0].classList.remove('scale-100');
+            modal.children[0].classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+    </script>
+</body>
+</html>
